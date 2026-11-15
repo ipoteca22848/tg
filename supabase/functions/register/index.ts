@@ -1,9 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2.89.0";
 const baseHeaders={"Access-Control-Allow-Origin":"https://ipoteca22848.github.io","Access-Control-Allow-Headers":"authorization,apikey,content-type,x-client-info","Access-Control-Allow-Methods":"POST,OPTIONS","Content-Type":"application/json"};
 Deno.serve(async(req)=>{
- const allowed=["https://ipoteca22848.github.io","http://127.0.0.1:8765","http://localhost:8765","http://127.0.0.1:4173","http://localhost:4173"];
- const origin=req.headers.get("origin")||"";
- const headers={...baseHeaders,"Access-Control-Allow-Origin":allowed.includes(origin)?origin:allowed[0],"Vary":"Origin"};
+ // Public, non-cookie signup API. All privileges remain guarded server-side.
+ const headers={...baseHeaders,"Access-Control-Allow-Origin":"*"};
  if(req.method==="OPTIONS")return new Response("ok",{headers});
  if(req.method!=="POST")return new Response(JSON.stringify({error:"POST required"}),{status:405,headers});
  try {
