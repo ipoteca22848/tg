@@ -67,6 +67,20 @@ class BuildSafetyTests(unittest.TestCase):
                     build.build(True, 4)
                 prepare.assert_not_called()
 
+    def test_command_failure_preserves_exit_status(self):
+        with self.assertRaises(subprocess.CalledProcessError) as caught:
+            build.run([build.sys.executable, "-c", "raise SystemExit(7)"])
+        self.assertEqual(caught.exception.returncode, 7)
+
+    def test_compile_stage_does_not_rebuild_dependencies(self):
+        with patch.object(build, "check_windows"), patch.object(build, "run") as run:
+            with patch.object(build, "prepare") as prepare, patch.object(build, "package") as package:
+                build.build(True, 2, "compile")
+                prepare.assert_not_called()
+                package.assert_not_called()
+                self.assertEqual(run.call_count, 1)
+                self.assertEqual(run.call_args.args[0][0:2], ["cmake", "--build"])
+
 
 if __name__ == "__main__":
     unittest.main()

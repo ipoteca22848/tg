@@ -10,6 +10,7 @@ import shutil
 import struct
 import subprocess
 import sys
+import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,10 +19,25 @@ PIN = json.loads((ROOT / "upstream.json").read_text(encoding="utf-8"))
 
 
 def run(args, cwd=ROOT, capture=False):
-    return subprocess.run(
-        [str(arg) for arg in args], cwd=cwd, check=True,
-        text=True, stdout=subprocess.PIPE if capture else None,
-    ).stdout
+    command = [str(arg) for arg in args]
+    if capture:
+        return subprocess.run(command, cwd=cwd, check=True,
+                              text=True, stdout=subprocess.PIPE).stdout
+    started = time.monotonic()
+    environment = os.environ.copy()
+    environment["PYTHONUNBUFFERED"] = "1"
+    with subprocess.Popen(command, cwd=cwd, env=environment) as process:
+        while True:
+            try:
+                code = process.wait(timeout=45)
+                if code:
+                    raise subprocess.CalledProcessError(code, command)
+                return None
+            except subprocess.TimeoutExpired:
+                minutes = (time.monotonic() - started) / 60
+                print(f"Still running: {Path(command[0]).name}, {minutes:.1f} min elapsed. "
+                      "This confirms the process is alive, not that compilation is progressing.",
+                      flush=True)
 
 
 def apply_patch(source, patch):
@@ -109,12 +125,28 @@ def package(test_api):
     print(f"Built {output}. Runtime checks remain required.")
 
 
-def build(test_api, jobs):
+def build(test_api, jobs, stage="all"):
     check_windows()
-    credentials(test_api)
-    prepare()
-    run([sys.executable, SOURCE / "Telegram/build/prepare/prepare.py",
-         "skip-release", "silent", "qt6"], cwd=SOURCE)
+    if stage in ("all", "configure"):
+        credentials(test_api)
+    if stage == "all":
+        prepare()
+    if stage in ("all", "dependencies"):
+        print("Building dependencies: Qt, FFmpeg, WebRTC and others. First run can take hours.", flush=True)
+        run([sys.executable, SOURCE / "Telegram/build/prepare/prepare.py",
+             "skip-release", "silent", "qt6"], cwd=SOURCE)
+    if stage in ("all", "configure"):
+        configure(test_api)
+    if stage in ("all", "compile"):
+        print("Compiling Telegram Desktop Debug x64.", flush=True)
+        run(["cmake", "--build", SOURCE / "out", "--config", "Debug",
+             "--target", "Telegram", "--parallel", str(jobs)])
+    if stage in ("all", "package"):
+        package(test_api)
+
+
+def configure(test_api):
+    print("Configuring Telegram Desktop.", flush=True)
     initial_cache = SOURCE.parent / "api-cache.cmake"
     initial_cache.write_text(
         'set(TDESKTOP_API_ID "$ENV{TDESKTOP_API_ID}" CACHE STRING "API ID" FORCE)\n'
@@ -127,9 +159,6 @@ def build(test_api, jobs):
          "-D", "CMAKE_CONFIGURATION_TYPES=Debug",
          "-D", "DESKTOP_APP_ENABLE_LTO=OFF",
          "-D", "DESKTOP_APP_DISABLE_AUTOUPDATE=ON"], cwd=SOURCE / "Telegram")
-    run(["cmake", "--build", SOURCE / "out", "--config", "Debug",
-         "--target", "Telegram", "--parallel", str(jobs)])
-    package(test_api)
 
 
 def main():
@@ -139,6 +168,8 @@ def main():
     parser.add_argument("--test-api", action="store_true",
                         help="Limited upstream test credentials; never distribute this build.")
     parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--stage", choices=("all", "dependencies", "configure", "compile", "package"),
+                        default="all", help="CI stages; prepare sources before running individual stages.")
     args = parser.parse_args()
     if args.jobs < 1:
         parser.error("--jobs must be positive")
@@ -148,7 +179,7 @@ def main():
         if args.prepare_only:
             prepare(submodules=not args.no_submodules)
         else:
-            build(args.test_api, args.jobs)
+            build(args.test_api, args.jobs, args.stage)
     except (OSError, RuntimeError, subprocess.CalledProcessError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1

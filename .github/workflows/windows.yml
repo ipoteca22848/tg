@@ -18,6 +18,8 @@ jobs:
     runs-on: windows-2025
     timeout-minutes: 360
     env:
+      PYTHONUNBUFFERED: '1'
+      TEST_API: ${{ github.event_name == 'push' && 'true' || inputs.test_api }}
       TDESKTOP_API_ID: ${{ secrets.TDESKTOP_API_ID }}
       TDESKTOP_API_HASH: ${{ secrets.TDESKTOP_API_HASH }}
     steps:
@@ -32,12 +34,39 @@ jobs:
           sdk: '10.0.26100.0'
       - name: Check build tooling
         run: python -m unittest discover -s tests -v
-      - name: Build Debug x64
+      - name: Fetch pinned sources and submodules
+        run: python -u scripts/build.py --prepare-only
+      - name: Restore dependency cache
+        uses: actions/cache/restore@v4
+        id: dependencies
+        with:
+          path: |
+            .build/Libraries
+            .build/ThirdParty
+          key: windows-2025-x64-msvc1444-sdk26100-${{ hashFiles('upstream.json', '.build/tdesktop/Telegram/build/prepare/**', '.build/tdesktop/Telegram/build/qt_version.py') }}
+      - name: Build dependencies (first run can take hours)
+        run: python -u scripts/build.py --stage dependencies
+      - name: Save compiled dependencies
+        if: steps.dependencies.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .build/Libraries
+            .build/ThirdParty
+          key: ${{ steps.dependencies.outputs.cache-primary-key }}
+      - name: Configure Telegram Debug x64
         shell: pwsh
-        env:
-          TEST_API: ${{ github.event_name == 'push' && 'true' || inputs.test_api }}
         run: |
-          $buildArgs = @('scripts/build.py', '--jobs', '4')
+          $buildArgs = @('-u', 'scripts/build.py', '--stage', 'configure')
+          if ($env:TEST_API -eq 'true') { $buildArgs += '--test-api' }
+          python @buildArgs
+          exit $LASTEXITCODE
+      - name: Compile Telegram Debug x64
+        run: python -u scripts/build.py --stage compile --jobs 4
+      - name: Package Windows executable
+        shell: pwsh
+        run: |
+          $buildArgs = @('-u', 'scripts/build.py', '--stage', 'package')
           if ($env:TEST_API -eq 'true') { $buildArgs += '--test-api' }
           python @buildArgs
           exit $LASTEXITCODE
