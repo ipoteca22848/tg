@@ -1,0 +1,98 @@
+[
+  {
+    "id": "plush-pepe",
+    "name": "Plush Pepe",
+    "image": "./gifts/plush-pepe.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5936013938331222567.webp",
+    "stars": 500,
+    "ton_milli": 5000
+  },
+  {
+    "id": "durovs-cap",
+    "name": "Durov's Cap",
+    "image": "./gifts/durovs-cap.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5915521180483191380.webp",
+    "stars": 400,
+    "ton_milli": 4000
+  },
+  {
+    "id": "eternal-rose",
+    "name": "Eternal Rose",
+    "image": "./gifts/eternal-rose.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5882125812596999035.webp",
+    "stars": 150,
+    "ton_milli": 1500
+  },
+  {
+    "id": "jelly-bunny",
+    "name": "Jelly Bunny",
+    "image": "./gifts/jelly-bunny.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5915502858152706668.webp",
+    "stars": 100,
+    "ton_milli": 1000
+  },
+  {
+    "id": "precious-peach",
+    "name": "Precious Peach",
+    "image": "./gifts/precious-peach.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5933671725160989227.webp",
+    "stars": 250,
+    "ton_milli": 2500
+  },
+  {
+    "id": "diamond-ring",
+    "name": "Diamond Ring",
+    "image": "./gifts/diamond-ring.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5868503709637411929.webp",
+    "stars": 200,
+    "ton_milli": 2000
+  },
+  {
+    "id": "toy-bear",
+    "name": "Toy Bear",
+    "image": "./gifts/toy-bear.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5868220813026526561.webp",
+    "stars": 75,
+    "ton_milli": 750
+  },
+  {
+    "id": "astral-shard",
+    "name": "Astral Shard",
+    "image": "./gifts/astral-shard.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5933629604416717361.webp",
+    "stars": 350,
+    "ton_milli": 3500
+  },
+  {
+    "id": "perfume-bottle",
+    "name": "Perfume Bottle",
+    "image": "./gifts/perfume-bottle.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5913517067138499193.webp",
+    "stars": 125,
+    "ton_milli": 1250
+  },
+  {
+    "id": "magic-potion",
+    "name": "Magic Potion",
+    "image": "./gifts/magic-potion.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5846226946928673709.webp",
+    "stars": 180,
+    "ton_milli": 1800
+  },
+  {
+    "id": "loot-bag",
+    "name": "Loot Bag",
+    "image": "./gifts/loot-bag.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5868659926187901653.webp",
+    "stars": 220,
+    "ton_milli": 2200
+  },
+  {
+    "id": "swiss-watch",
+    "name": "Swiss Watch",
+    "image": "./gifts/swiss-watch.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5936043693864651359.webp",
+    "stars": 300,
+    "ton_milli": 3000
+  }
+]

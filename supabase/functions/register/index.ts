@@ -9,7 +9,9 @@ Deno.serve(async(req)=>{
  try {
   if(Number(req.headers.get("content-length")||0)>4096)throw new Error("Слишком большой запрос");
   const raw=await req.text();if(raw.length>4096)throw new Error("Слишком большой запрос");
-  const {name,password}=JSON.parse(raw);
+  const {name,password,prefix="7"}=JSON.parse(raw);
+  const lengths:Record<string,number>={"7":10,"888":8,"1":10,"44":10,"49":10};
+  if(!Object.hasOwn(lengths,String(prefix)))throw new Error("Выберите доступный префикс");
   if(typeof name!=="string"||name.trim().length<1||name.length>50||typeof password!=="string"||password.length<10||password.length>128)throw new Error("Укажите имя и пароль от 10 до 128 символов");
   const admin=createClient(Deno.env.get("SUPABASE_URL")!,Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,{auth:{persistSession:false}});
   const ip=req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()||req.headers.get("x-real-ip")||"unknown";
@@ -19,7 +21,9 @@ Deno.serve(async(req)=>{
   if(limit.error)throw new Error("Регистрация временно недоступна");
   if(!limit.data)return new Response(JSON.stringify({error:"Можно создать до 5 аккаунтов в час. Попробуйте позже."}),{status:429,headers});
   for(let i=0;i<3;i++){
-   const number=String(1000000000+crypto.getRandomValues(new Uint32Array(1))[0]%4000000000);
+   const digits=Array.from(crypto.getRandomValues(new Uint8Array(lengths[String(prefix)]))).map(x=>String(x%10)).join("");
+   const number=String(prefix)+digits;
+   if(number==="88888888888")continue;
    const result=await admin.auth.admin.createUser({email:number+"@companion.invalid",password,email_confirm:true,user_metadata:{name:name.trim()}});
    if(!result.error)return new Response(JSON.stringify({number}),{headers});
    if(!result.error.message.toLowerCase().includes("already"))throw new Error("Не удалось создать аккаунт. Попробуйте другой пароль.");
