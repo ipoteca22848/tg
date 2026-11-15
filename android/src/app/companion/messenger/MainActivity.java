@@ -24,7 +24,7 @@ public final class MainActivity extends Activity {
   FrameLayout root=new FrameLayout(this);root.setBackgroundColor(Color.BLACK);
   if(Build.VERSION.SDK_INT>=30){root.setOnApplyWindowInsetsListener((v,insets)->{android.graphics.Insets bars=insets.getInsets(WindowInsets.Type.systemBars());v.setPadding(bars.left,bars.top,bars.right,bars.bottom);return insets;});}
   web=new WebView(this);web.setBackgroundColor(Color.BLACK);root.addView(web,new FrameLayout.LayoutParams(-1,-1));setContentView(root);
-  WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(true);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);settings.setJavaScriptCanOpenWindowsAutomatically(false);settings.setSupportMultipleWindows(false);settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" CompanionAndroid/0.6.0");
+  WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(true);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);settings.setJavaScriptCanOpenWindowsAutomatically(false);settings.setSupportMultipleWindows(false);settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" CompanionAndroid/0.7.0");
   CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
   web.addJavascriptInterface(new NativeUI(),"CompanionAndroid");
   web.setWebViewClient(new WebViewClient(){
@@ -52,9 +52,10 @@ public final class MainActivity extends Activity {
    }
    @Override public void onPermissionRequest(PermissionRequest request){runOnUiThread(()->{
     if(!HOST.equals(request.getOrigin().getHost())||!"https".equals(request.getOrigin().getScheme())){request.deny();return;}
-    String[] resources=request.getResources();if(resources.length!=1||!PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resources[0])){request.deny();return;}
-    if(checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)==android.content.pm.PackageManager.PERMISSION_GRANTED){request.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});return;}
-    if(pendingAudio!=null)pendingAudio.deny();pendingAudio=request;requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO},RECORD_PERMISSION);
+    String[] resources=request.getResources();ArrayList<String> permissions=new ArrayList<>();
+    for(String resource:resources){String permission;if(PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource))permission=android.Manifest.permission.RECORD_AUDIO;else if(PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource))permission=android.Manifest.permission.CAMERA;else{request.deny();return;}if(checkSelfPermission(permission)!=android.content.pm.PackageManager.PERMISSION_GRANTED)permissions.add(permission);}
+    if(permissions.isEmpty()){request.grant(resources);return;}
+    if(pendingAudio!=null){request.deny();return;}pendingAudio=request;requestPermissions(permissions.toArray(new String[0]),RECORD_PERMISSION);
    });}
    @Override public void onPermissionRequestCanceled(PermissionRequest request){if(pendingAudio==request)pendingAudio=null;}
   });
@@ -66,10 +67,10 @@ public final class MainActivity extends Activity {
   @JavascriptInterface public void copy(String text){runOnUiThread(()->{ClipboardManager manager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);manager.setPrimaryClip(ClipData.newPlainText("Companion",text));});}
  }
  @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);if(request==PICK_IMAGE&&pendingFile!=null){ArrayList<Uri> uris=new ArrayList<>();if(result==RESULT_OK&&data!=null){if(data.getClipData()!=null){for(int i=0;i<data.getClipData().getItemCount();i++){Uri uri=data.getClipData().getItemAt(i).getUri();if("content".equals(uri.getScheme()))uris.add(uri);}}else if(data.getData()!=null&&"content".equals(data.getData().getScheme()))uris.add(data.getData());}pendingFile.onReceiveValue(uris.isEmpty()?null:uris.toArray(new Uri[0]));pendingFile=null;}}
- @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] grants){super.onRequestPermissionsResult(request,permissions,grants);if(request==RECORD_PERMISSION&&pendingAudio!=null){if(grants.length>0&&grants[0]==android.content.pm.PackageManager.PERMISSION_GRANTED)pendingAudio.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE});else pendingAudio.deny();pendingAudio=null;}}
+ @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] grants){super.onRequestPermissionsResult(request,permissions,grants);if(request==RECORD_PERMISSION&&pendingAudio!=null){boolean allowed=grants.length>0;for(int grant:grants)allowed&=grant==android.content.pm.PackageManager.PERMISSION_GRANTED;if(allowed)pendingAudio.grant(pendingAudio.getResources());else pendingAudio.deny();pendingAudio=null;}}
  @Override public void onBackPressed(){web.evaluateJavascript("(()=>{const d=document.querySelector('dialog[open]');if(d){d.close();return true;}if(document.body.classList.contains('mobile-chat')){document.body.classList.remove('mobile-chat');return true;}return false;})()",result->{if(!"true".equals(result))finish();});}
  @Override protected void onPause(){super.onPause();if(web!=null){if(pendingAudio==null)web.evaluateJavascript("window.CompanionStopRecording&&window.CompanionStopRecording()",null);web.onPause();}}
- @Override protected void onStop(){if(web!=null)web.evaluateJavascript("window.CompanionStopRecording&&window.CompanionStopRecording()",null);super.onStop();}
+ @Override protected void onStop(){if(web!=null)web.evaluateJavascript("window.CompanionStopRecording&&window.CompanionStopRecording();window.CompanionEndCall&&window.CompanionEndCall()",null);super.onStop();}
  @Override protected void onResume(){super.onResume();if(web!=null)web.onResume();}
  @Override protected void onDestroy(){if(pendingFile!=null){pendingFile.onReceiveValue(null);pendingFile=null;}if(pendingAudio!=null){pendingAudio.deny();pendingAudio=null;}if(web!=null){web.removeJavascriptInterface("CompanionAndroid");web.destroy();}super.onDestroy();}
 }

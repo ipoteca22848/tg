@@ -94,5 +94,173 @@
     "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5936043693864651359.webp",
     "stars": 300,
     "ton_milli": 3000
+  },
+  {
+    "id": "classic-heart",
+    "name": "Сердечко",
+    "image": "./gifts/classic-heart.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170145012310081615.webp",
+    "stars": 15,
+    "ton_milli": 150
+  },
+  {
+    "id": "classic-bear",
+    "name": "Мишка",
+    "image": "./gifts/classic-bear.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170233102089322756.webp",
+    "stars": 15,
+    "ton_milli": 150
+  },
+  {
+    "id": "classic-gift",
+    "name": "Подарок",
+    "image": "./gifts/classic-gift.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170250947678437525.webp",
+    "stars": 25,
+    "ton_milli": 250
+  },
+  {
+    "id": "classic-rose",
+    "name": "Роза",
+    "image": "./gifts/classic-rose.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5168103777563050263.webp",
+    "stars": 25,
+    "ton_milli": 250
+  },
+  {
+    "id": "classic-cake",
+    "name": "Торт",
+    "image": "./gifts/classic-cake.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170144170496491616.webp",
+    "stars": 50,
+    "ton_milli": 500
+  },
+  {
+    "id": "classic-bouquet",
+    "name": "Букет цветов",
+    "image": "./gifts/classic-bouquet.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170314324215857265.webp",
+    "stars": 50,
+    "ton_milli": 500
+  },
+  {
+    "id": "classic-rocket",
+    "name": "Ракета",
+    "image": "./gifts/classic-rocket.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170564780938756245.webp",
+    "stars": 50,
+    "ton_milli": 500
+  },
+  {
+    "id": "classic-champagne",
+    "name": "Шампанское",
+    "image": "./gifts/classic-champagne.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_6028601630662853006.webp",
+    "stars": 50,
+    "ton_milli": 500
+  },
+  {
+    "id": "classic-trophy",
+    "name": "Кубок",
+    "image": "./gifts/classic-trophy.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5168043875654172773.webp",
+    "stars": 100,
+    "ton_milli": 1000
+  },
+  {
+    "id": "classic-ring",
+    "name": "Бриллиантовое кольцо",
+    "image": "./gifts/classic-ring.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170690322832818290.webp",
+    "stars": 100,
+    "ton_milli": 1000
+  },
+  {
+    "id": "classic-diamond",
+    "name": "Самоцвет",
+    "image": "./gifts/classic-diamond.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5170521118301225164.webp",
+    "stars": 100,
+    "ton_milli": 1000
+  },
+  {
+    "id": "intelligence-cup",
+    "name": "Intelligence Cup",
+    "image": "./gifts/intelligence-cup.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_6046499901846586791.webp",
+    "stars": 500,
+    "ton_milli": 5000
+  },
+  {
+    "id": "algorithm-cup",
+    "name": "Algorithm Cup",
+    "image": "./gifts/algorithm-cup.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_6050827940390765935.webp",
+    "stars": 500,
+    "ton_milli": 5000
+  },
+  {
+    "id": "lucky-locket",
+    "name": "Lucky Locket",
+    "image": "./gifts/lucky-locket.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5872744075014177223.webp",
+    "stars": 300,
+    "ton_milli": 3000
+  },
+  {
+    "id": "durovs-glasses",
+    "name": "Durov’s Glasses",
+    "image": "./gifts/durovs-glasses.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5834651202612102354.webp",
+    "stars": 500,
+    "ton_milli": 5000
+  },
+  {
+    "id": "resistance-dog",
+    "name": "Resistance Dog",
+    "image": "./gifts/resistance-dog.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5832279504491381684.webp",
+    "stars": 250,
+    "ton_milli": 2500
+  },
+  {
+    "id": "heart-locket",
+    "name": "Heart Locket",
+    "image": "./gifts/heart-locket.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5868455043362980631.webp",
+    "stars": 400,
+    "ton_milli": 4000
+  },
+  {
+    "id": "heroic-helmet",
+    "name": "Heroic Helmet",
+    "image": "./gifts/heroic-helmet.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5895328365971244193.webp",
+    "stars": 350,
+    "ton_milli": 3500
+  },
+  {
+    "id": "mighty-arm",
+    "name": "Mighty Arm",
+    "image": "./gifts/mighty-arm.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5895518353849582541.webp",
+    "stars": 300,
+    "ton_milli": 3000
+  },
+  {
+    "id": "mirage-lamp",
+    "name": "Mirage Lamp",
+    "image": "./gifts/mirage-lamp.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5913351908466098791.webp",
+    "stars": 300,
+    "ton_milli": 3000
+  },
+  {
+    "id": "nail-bracelet",
+    "name": "Nail Bracelet",
+    "image": "./gifts/nail-bracelet.webp",
+    "source": "https://raw.githubusercontent.com/denzyve/cdn-telegram-gifts/main/assets/webp/gift_5870720080265871962.webp",
+    "stars": 300,
+    "ton_milli": 3000
   }
 ]

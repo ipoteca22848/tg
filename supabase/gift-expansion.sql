@@ -1,0 +1,23 @@
+insert into public.gift_catalog(id,name,image,stars,ton_milli,active) values
+('classic-heart','Сердечко','./gifts/classic-heart.webp',15,150,true),
+('classic-bear','Мишка','./gifts/classic-bear.webp',15,150,true),
+('classic-gift','Подарок','./gifts/classic-gift.webp',25,250,true),
+('classic-rose','Роза','./gifts/classic-rose.webp',25,250,true),
+('classic-cake','Торт','./gifts/classic-cake.webp',50,500,true),
+('classic-bouquet','Букет цветов','./gifts/classic-bouquet.webp',50,500,true),
+('classic-rocket','Ракета','./gifts/classic-rocket.webp',50,500,true),
+('classic-champagne','Шампанское','./gifts/classic-champagne.webp',50,500,true),
+('classic-trophy','Кубок','./gifts/classic-trophy.webp',100,1000,true),
+('classic-ring','Бриллиантовое кольцо','./gifts/classic-ring.webp',100,1000,true),
+('classic-diamond','Самоцвет','./gifts/classic-diamond.webp',100,1000,true),
+('intelligence-cup','Intelligence Cup','./gifts/intelligence-cup.webp',500,5000,true),
+('algorithm-cup','Algorithm Cup','./gifts/algorithm-cup.webp',500,5000,true),
+('lucky-locket','Lucky Locket','./gifts/lucky-locket.webp',300,3000,true),
+('durovs-glasses','Durov’s Glasses','./gifts/durovs-glasses.webp',500,5000,true),
+('resistance-dog','Resistance Dog','./gifts/resistance-dog.webp',250,2500,true),
+('heart-locket','Heart Locket','./gifts/heart-locket.webp',400,4000,true),
+('heroic-helmet','Heroic Helmet','./gifts/heroic-helmet.webp',350,3500,true),
+('mighty-arm','Mighty Arm','./gifts/mighty-arm.webp',300,3000,true),
+('mirage-lamp','Mirage Lamp','./gifts/mirage-lamp.webp',300,3000,true),
+('nail-bracelet','Nail Bracelet','./gifts/nail-bracelet.webp',300,3000,true)
+on conflict(id) do update set name=excluded.name,image=excluded.image,stars=excluded.stars,ton_milli=excluded.ton_milli,active=true;
