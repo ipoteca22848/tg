@@ -1,0 +1,14 @@
+diff --git a/Telegram/SourceFiles/boxes/about_box.cpp b/Telegram/SourceFiles/boxes/about_box.cpp
+index 31c60aa..193b5d7 100644
+--- a/Telegram/SourceFiles/boxes/about_box.cpp
++++ b/Telegram/SourceFiles/boxes/about_box.cpp
+@@ -124,6 +124,9 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
+ 		Ui::AddSkip(layout, st::aboutSkip);
+ 	};
+ 
++	addText(rpl::single(tr::marked(
++		u"Скопировано из открытого исходного кода Telegram Desktop. "_q
++		+ u"Неофициальная сборка."_q)));
+ 	addText(Text1());
+ 	addText(Text2());
+ 	addText(Text3());

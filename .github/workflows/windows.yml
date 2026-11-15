@@ -1,0 +1,50 @@
+name: Windows x64 unofficial client
+
+on:
+  push:
+    branches: [codex/windows-exe]
+  workflow_dispatch:
+    inputs:
+      test_api:
+        description: 'Use limited test API credentials (not for distribution)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 360
+    env:
+      TDESKTOP_API_ID: ${{ secrets.TDESKTOP_API_ID }}
+      TDESKTOP_API_HASH: ${{ secrets.TDESKTOP_API_HASH }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          toolset: '14.44'
+          sdk: '10.0.26100.0'
+      - name: Check build tooling
+        run: python -m unittest discover -s tests -v
+      - name: Build Debug x64
+        shell: pwsh
+        env:
+          TEST_API: ${{ github.event_name == 'push' && 'true' || inputs.test_api }}
+        run: |
+          $buildArgs = @('scripts/build.py', '--jobs', '4')
+          if ($env:TEST_API -eq 'true') { $buildArgs += '--test-api' }
+          python @buildArgs
+          exit $LASTEXITCODE
+      - name: Upload executable archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: tg-windows-x64-debug
+          path: dist/*.zip
+          if-no-files-found: error
+          retention-days: 7
