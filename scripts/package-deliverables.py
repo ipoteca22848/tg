@@ -9,7 +9,7 @@ if exe.exists():
   z.write(exe,'Companion.exe');z.write(root/'README.md','README.md')
   for f in (root/'licenses').glob('*'):z.write(f,'licenses/'+f.name)
 with ZipFile(out/'Companion-Website-Source.zip','w',ZIP_DEFLATED) as z:
- for folder in ['docs','src','supabase','host']:
+ for folder in ['docs','src','supabase','host','tests']:
   for f in (root/folder).rglob('*'):
    if f.is_file():z.write(f,str(f.relative_to(root)))
  for name in ['package.json','package-lock.json','Dockerfile','compose.yaml','.dockerignore']:

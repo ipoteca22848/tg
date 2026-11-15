@@ -79,7 +79,7 @@ func main() {
 	if err != nil {
 		return
 	}
-	root := filepath.Join(base, "Companion", "client-0.7.0")
+	root := filepath.Join(base, "Companion", "client-0.8.0")
 	if err = os.MkdirAll(root, 0700); err != nil {
 		return
 	}

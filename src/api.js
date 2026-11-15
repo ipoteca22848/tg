@@ -3,7 +3,7 @@ import {URL,KEY,EDGE_JWT} from './config.js';
 export const sb=createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
 function check(result){if(result.error)throw result.error;return result.data}
 export async function register(name,password,prefix){const response=await fetch(URL+'/functions/v1/register',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+EDGE_JWT,apikey:KEY},body:JSON.stringify({name,password,prefix})});const data=await response.json();if(!response.ok)throw new Error(data.error||data.message||'Регистрация недоступна');return data.number}
-export async function login(number,password){return check(await sb.auth.signInWithPassword({email:normalizeNumber(number)+'@companion.invalid',password}))}
+export async function login(number,password){const result=await sb.auth.signInWithPassword({email:normalizeNumber(number)+'@companion.invalid',password});if(result.error?.code==='user_banned')throw Error('Аккаунт заблокирован администратором');return check(result)}
 export async function profile(id){return check(await sb.from('profiles').select('*').eq('id',id).single())}
 export function normalizeNumber(n){const v=String(n).replace(/[\s()+-]/g,'');if(!/^[0-9]{10,15}$/.test(v))throw new Error('Введите номер: от 10 до 15 цифр, можно с +');return v}
 export async function find(query){const q=String(query).trim();const field=/[a-zA-Z_@]/.test(q)?'username':'number';const value=field==='username'?q.replace(/^@/,'').toLowerCase():normalizeNumber(q);return check(await sb.from('profiles').select('*').eq(field,value).maybeSingle())}
@@ -32,3 +32,5 @@ export async function callAction(call,device,action){return check(await sb.rpc('
 export async function signalCall(call,device,signal_kind,payload){return check(await sb.rpc('send_call_signal',{call,device,signal_kind,payload}))}
 export async function callSignals(id,uid,last){return check(await sb.from('call_signals').select('*').eq('call_id',id).neq('sender',uid).gt('id',last).order('id'))}
 export async function transferCurrency(target,currency,amount,note,request){return check(await sb.rpc('send_currency_gift',{target,currency,amount,note,request}))}
+export async function accountStatus(){return check(await sb.rpc('account_status'))}
+export async function adminAction(payload){const {data}=await sb.auth.getSession();if(!data.session)throw Error('Войдите в аккаунт');const response=await fetch(URL+'/functions/v1/admin',{method:'POST',headers:{Authorization:'Bearer '+data.session.access_token,apikey:KEY,...(payload instanceof FormData?{}:{'Content-Type':'application/json'})},body:payload instanceof FormData?payload:JSON.stringify(payload)});const result=await response.json();if(!response.ok)throw Error(result.error||'Нет доступа к админ-панели');return result}
