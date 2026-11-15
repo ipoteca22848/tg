@@ -26,6 +26,7 @@ docker compose up -d --build
 2. `supabase/profile-fields.sql`
 3. `supabase/profile-gifts.sql`
 4. `supabase/gift-catalog.sql`
+5. `supabase/chat-media.sql`
 
 Разверните Edge Function `supabase/functions/register/index.ts` с проверкой JWT. `SUPABASE_URL` и `SUPABASE_SERVICE_ROLE_KEY` используются только в окружении Edge Function, не в сайте.
 
@@ -42,3 +43,5 @@ python3 -m http.server 4173 --directory docs
 ```
 
 Звёзды и TON в этой реализации — тестовые единицы без денежной стоимости; реальные платежи не подключены. Все исходники кроме публичной конфигурации должны оставаться вне document root хостинга.
+
+Медиа переписки используют закрытый bucket `chat-media`. При собственном reverse proxy разрешите `media-src` для вашего Supabase-домена. Для записи микрофона сайт должен быть открыт по HTTPS; на loopback-адресе браузер допускает локальную проверку.

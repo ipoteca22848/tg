@@ -52,6 +52,9 @@ func wndProc(hwnd uintptr, msg uint32, wp, lp uintptr) uintptr {
 	switch msg {
 	case 5:
 		if browser != nil {
+			if wp == 1 {
+				browser.Eval("window.CompanionStopRecording&&window.CompanionStopRecording()")
+			}
 			browser.Resize()
 		}
 		return 0
@@ -76,7 +79,7 @@ func main() {
 	if err != nil {
 		return
 	}
-	root := filepath.Join(base, "Companion", "client-0.4.0")
+	root := filepath.Join(base, "Companion", "client-0.6.0")
 	if err = os.MkdirAll(root, 0700); err != nil {
 		return
 	}
@@ -124,7 +127,7 @@ func main() {
 	call("ShowWindow", window, 5)
 	call("UpdateWindow", window)
 	browser = edge.NewChromium()
-	browser.SetGlobalPermission(edge.CoreWebView2PermissionStateDeny)
+	browser.SetGlobalPermission(edge.CoreWebView2PermissionStateDefault)
 	browser.DataPath = filepath.Join(base, "Companion", "webview-profile")
 	if !browser.Embed(window) {
 		showError("Требуется Microsoft Edge WebView2 Runtime. Установите его с https://developer.microsoft.com/microsoft-edge/webview2/")
